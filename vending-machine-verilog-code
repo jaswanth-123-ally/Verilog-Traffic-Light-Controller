@@ -1,0 +1,80 @@
+module vendingmachine (
+  input clk,
+  input rst,
+  input coin10,
+  input coin20,
+  output reg dispense
+);
+
+parameter
+
+s0=3'b000,
+s10=3'b001,
+s20=3'b010,
+s30=3'b011;
+
+reg [2:0] state,nextstate;
+
+always@(posedge clk or posedge rst)
+
+begin
+
+  if(rst)
+  state<=s0;
+  else
+  state<=nextstate;
+end
+
+always@(*)
+begin
+  case(state)
+
+  s0:
+  begin
+    if(coin10)
+    nextstate=s10;
+    else if(coin20)
+    nextstate=s20;
+    else
+    nextstate=s0;
+  end
+
+  s10:
+  begin
+    if(coin10)
+    nextstate=s20;
+    else if(coin20)
+    nextstate=s30;
+    else
+    nextstate=s10;
+  end
+
+  s20:
+  begin
+    if(coin10)
+    nextstate=s30;
+    else
+    nextstate=s20;
+  end
+
+  s30:
+  begin
+
+    nextstate=s0;
+
+  end
+  default:nextstate=s0;
+  endcase
+end
+
+always@(*)
+begin
+  dispense=0;
+  case(state)
+  s30:
+  begin
+    dispense=1;
+  end
+  endcase
+end
+endmodule
