@@ -1,0 +1,42 @@
+module vendingmachine_tb;
+
+reg clk;
+reg rst;
+reg coin10;
+reg coin20;
+wire dispense;
+
+vendingmachine uut(.clk(clk),.rst(rst),.coin10(coin10),.coin20(coin20),.dispense(dispense));
+
+always #5 clk=~clk;
+
+initial begin
+  $dumpfile("dump.vcd");
+  $dumpvars(0, vendingmachine_tb);
+
+  clk=0;
+  rst=1;
+  coin10=0;
+  coin20=0;
+
+
+  #10 rst=0;
+
+  #10 coin10=1;
+   #10 coin10=0;
+
+    #10 coin20=1;
+     #10 coin20=0;
+
+
+  
+
+  #200;
+
+  $finish;
+end
+
+initial begin
+ $monitor("$time=0%t,clk=%b,rst=%b,coin10=%b,coin20=%b,dispense=%b,clk,rst,dispense,coin10,coin20");
+end
+endmodule
