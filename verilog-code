@@ -1,0 +1,80 @@
+module trafficlight(
+  input clk,
+  input rst,
+  input light,
+  output reg red,
+  output reg green,
+  output reg yellow
+);
+
+parameter 
+s0=2'b00,
+s1=2'b01,
+s2=2'b10;
+
+reg[1:0] state,nextstate;
+
+always@(posedge clk or posedge rst)
+begin
+  if(rst)
+  state<=s0;
+  else
+  state<=nextstate;
+end
+
+always@(*)
+begin
+  case(state)
+
+  s0:
+  begin
+    if(light)
+    nextstate=s1;
+    else
+    nextstate=s0;
+  end
+
+  s1:
+  begin
+    if(light)
+    nextstate=s2;
+    else
+    nextstate=s1;
+  end
+  s2:
+  begin
+    if(light)
+    nextstate=s0;
+    else
+    nextstate=s2;
+  end
+  default:nextstate=s0;
+  endcase
+end
+
+always@(*)
+begin
+  red=0;
+  green=0;
+  yellow=0;
+
+  case(state)
+
+  s0:
+  begin
+    red=1;
+  end
+
+  s1:
+  begin
+    green=1;
+  end
+
+  s2:
+  begin
+    yellow=1;
+  end
+  endcase
+end
+endmodule
+
