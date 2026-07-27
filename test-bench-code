@@ -1,0 +1,37 @@
+
+module trafficlight_tb;
+
+reg clk;
+reg rst;
+reg light;
+wire red;
+wire green;
+wire yellow;
+
+trafficlight uut(.clk(clk),.rst(rst),.light(light),.red(red),.green(green),.yellow(yellow));
+
+
+always #5 clk=~clk;
+
+initial begin
+   $dumpfile("dump.vcd");
+  $dumpvars(0, trafficlight_tb);
+ 
+
+  clk=0;
+  rst=1;
+  light=0;
+
+ #10 rst=0;
+ #10 light=1;
+
+ #100;
+
+  $finish;
+
+end
+
+initial begin
+  $monitor("$time=0%t,clk=%b,rst=%b,light=%b,red=%b,green=%b,yellow=%b",clk,rst,light,red,green,yellow);
+end
+endmodule
